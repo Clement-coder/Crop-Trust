@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Menu, X, AppWindow, Globe, FileText, Mail, LogIn, ArrowRight } from "lucide-react"
+import { Menu, X, AppWindow, Globe, FileText, Mail, LogIn, ArrowRight, MessageSquare } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export function Navigation() {
@@ -47,6 +47,10 @@ export function Navigation() {
           <Link href="#contact" className="flex items-center gap-2 text-foreground hover:text-primary transition">
             <Mail size={18} />
             Contact
+          </Link>
+          <Link href="#testimonials" className="flex items-center gap-2 text-foreground hover:text-primary transition">
+            <MessageSquare size={18} />
+            Testimonials
           </Link>
         </div>
 
@@ -107,6 +111,14 @@ export function Navigation() {
             >
               <Mail size={18} />
               Contact
+            </Link>
+            <Link
+              href="#testimonials"
+              className="flex items-center gap-2 text-foreground hover:text-primary transition"
+              onClick={() => setIsOpen(false)}
+            >
+              <MessageSquare size={18} />
+              Testimonials
             </Link>
             <Button className="w-full bg-transparent" variant="outline" asChild onClick={() => setIsOpen(false)}>
               <Link href="/login" className="flex items-center gap-2">

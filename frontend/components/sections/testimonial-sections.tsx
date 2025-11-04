@@ -29,7 +29,7 @@ const testimonials = [
   },
 ]
 
-export function TestimonialsSection() {
+export function TestimonialSection() {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -44,7 +44,7 @@ export function TestimonialsSection() {
   }
 
   return (
-    <section className="py-20 bg-muted/30">
+    <section id="testimonials" className="py-20 bg-muted/30">
       <div className="max-w-6xl mx-auto px-4">
         <motion.div
           className="text-center mb-16"

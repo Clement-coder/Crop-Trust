@@ -2,6 +2,7 @@
 import Link from "next/link"
 import { Button } from "../ui/button"
 import { motion } from "framer-motion"
+import { Wheat, Truck, ShieldCheck, CircleDollarSign, ArrowRight, Store } from 'lucide-react';
 
 export function HeroSection() {
   const containerVariants = {
@@ -56,20 +57,24 @@ export function HeroSection() {
 
         <motion.div className="flex flex-col sm:flex-row gap-4 justify-center" variants={itemVariants}>
           <Button size="lg" asChild>
-            <Link href="/signup">Get Started</Link>
+            <Link href="/signup" className="flex items-center gap-2">
+              Get Started <ArrowRight size={20} />
+            </Link>
           </Button>
           <Button size="lg" variant="outline" asChild>
-            <Link href="#how-it-works">Explore Marketplace</Link>
+            <Link href="#how-it-works" className="flex items-center gap-2">
+              <Store size={20} /> Explore Marketplace
+            </Link>
           </Button>
         </motion.div>
 
         {/* Floating icons animation */}
         <motion.div className="mt-16 flex justify-center gap-8" variants={itemVariants}>
           {[
-            { emoji: "🌾", label: "Crops" },
-            { emoji: "🚚", label: "Delivery" },
-            { emoji: "✅", label: "Trust" },
-            { emoji: "💰", label: "Fair Price" },
+            { icon: <Wheat size={40} className="text-primary" />, label: "Crops" },
+            { icon: <Truck size={40} className="text-primary" />, label: "Delivery" },
+            { icon: <ShieldCheck size={40} className="text-primary" />, label: "Trust" },
+            { icon: <CircleDollarSign size={40} className="text-primary" />, label: "Fair Price" },
           ].map((item, index) => (
             <motion.div
               key={index}
@@ -77,7 +82,7 @@ export function HeroSection() {
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 3, delay: index * 0.2, repeat: Number.POSITIVE_INFINITY }}
             >
-              {item.emoji}
+              {item.icon}
             </motion.div>
           ))}
         </motion.div>
