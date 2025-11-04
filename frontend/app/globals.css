@@ -1,26 +1,135 @@
 @import "tailwindcss";
+/* @import "tw-animate-css"; */
+
+@custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Updated color variables for CropTrust design system */
+  /* Background and text */
+  --background: #f9faf4;
+  --foreground: #2c3b2c;
+
+  /* Cards and surfaces */
+  --card: #ffffff;
+  --card-foreground: #2c3b2c;
+
+  /* Primary brand color - moss green */
+  --primary: #4c7f45;
+  --primary-foreground: #ffffff;
+
+  /* Secondary colors */
+  --secondary: #8cab7d;
+  --secondary-foreground: #ffffff;
+
+  /* Accents */
+  --accent: #d9cba3;
+  --accent-foreground: #2c3b2c;
+
+  /* Muted colors */
+  --muted: #e6e6da;
+  --muted-foreground: #5f6b4f;
+
+  /* Status colors */
+  --success: #6da671;
+  --warning: #e8b54c;
+  --destructive: #b04a3f;
+  --destructive-foreground: #ffffff;
+
+  /* UI elements */
+  --border: #e6e6da;
+  --input: #f9faf4;
+  --ring: #4c7f45;
+
+  /* Contrast panel */
+  --contrast: #1f241c;
+
+  --radius: 1rem;
+}
+
+.dark {
+  --background: #1f241c;
+  --foreground: #f9faf4;
+  --card: #2c3b2c;
+  --card-foreground: #f9faf4;
+  --primary: #6da671;
+  --primary-foreground: #1f241c;
+  --secondary: #a8bfa0;
+  --secondary-foreground: #1f241c;
+  --accent: #d9cba3;
+  --accent-foreground: #1f241c;
+  --muted: #3a4733;
+  --muted-foreground: #b8bfb0;
+  --success: #7fbb73;
+  --warning: #f5d96b;
+  --destructive: #d97e73;
+  --border: #3a4733;
+  --input: #2c3b2c;
+  --ring: #6da671;
+  --contrast: #f9faf4;
 }
 
 @theme inline {
+  --font-sans: "Inter", sans-serif;
+  --font-serif: "Space Grotesk", sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
+  body {
+    @apply bg-background text-foreground;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif font-bold;
+  }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  p,
+  span,
+  label,
+  input,
+  textarea {
+    @apply font-sans;
+  }
 }
