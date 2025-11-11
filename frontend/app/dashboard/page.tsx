@@ -7,16 +7,35 @@ import { OverviewCard } from "@/components/dashboard/overview-card"
 import { RecentTransactions } from "@/components/dashboard/recent-transations"
 import { motion } from "framer-motion"
 import { Package, DollarSign, Star, Sprout, Truck, Lock, Clock } from 'lucide-react';
+import { useListings } from "@/hooks/use-listings"
 
 export default function DashboardPage() {
   const { ready, authenticated, user } = usePrivy();
   const router = useRouter();
+  const { listings } = useListings();
 
   useEffect(() => {
     if (ready && !authenticated) {
       router.push('/');
     }
   }, [ready, authenticated, router]);
+
+  const totalListedProducts = listings.length;
+  const cropsListed = listings.length; // Assuming "Crops Listed" is the same as total listed products
+
+  const moneyEarned = listings
+    .filter(listing => listing.status === "sold out")
+    .reduce((sum, listing) => {
+      const priceValue = parseFloat(listing.price.replace(/[^0-9.-]+/g, ""));
+      return sum + (isNaN(priceValue) ? 0 : priceValue);
+    }, 0);
+
+  const moneyInEscrow = listings
+    .filter(listing => listing.status === "active")
+    .reduce((sum, listing) => {
+      const priceValue = parseFloat(listing.price.replace(/[^0-9.-]+/g, ""));
+      return sum + (isNaN(priceValue) ? 0 : priceValue);
+    }, 0);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -44,12 +63,12 @@ export default function DashboardPage() {
           initial="hidden"
           animate="visible"
         >
-          <OverviewCard label="Total Listed Products" value={0} icon={<Package />} />
-          <OverviewCard label="Money Earned" value="$0.00" icon={<DollarSign />} />
+          <OverviewCard label="Total Listed Products" value={totalListedProducts} icon={<Package />} />
+          <OverviewCard label="Money Earned" value={`$${moneyEarned.toFixed(2)}`} icon={<DollarSign />} />
           <OverviewCard label="Ratings" value="0/5" icon={<Star />} />
-          <OverviewCard label="Crops Listed" value={0} icon={<Sprout />} />
+          <OverviewCard label="Crops Listed" value={cropsListed} icon={<Sprout />} />
           <OverviewCard label="Active Deliveries" value={0} icon={<Truck />} />
-          <OverviewCard label="Money in Escrow" value="₦0.00" icon={<Lock />} />
+          <OverviewCard label="Money in Escrow" value={`$${moneyInEscrow.toFixed(2)}`} icon={<Lock />} />
           <OverviewCard label="Pending Sales" value={0} icon={<Clock />} />
         </motion.div>
 

@@ -46,7 +46,8 @@ export function Sidebar() {
         variant: "success",
       })
       window.location.href = "/"
-    } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (_error) {
       toast({
         title: "Logout failed",
         description: "An error occurred while logging out.",

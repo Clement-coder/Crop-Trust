@@ -6,108 +6,16 @@ import { CropCard } from "@/components/marketplace/crop-card"
 import { Filters, type FilterState } from "@/components/marketplace/filters"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
-import { Search, ChevronLeft, ChevronRight } from "lucide-react"
-
-const mockCrops = [
-  {
-    id: 1,
-    name: "Fresh Tomatoes",
-    farmer: "Okafor Farms",
-    location: "Lagos State",
-    price: "₦8,500/kg",
-    quantity: "500kg",
-    rating: 4.8,
-    reviews: 124,
-    image: "",
-    inStock: true,
-  },
-  {
-    id: 2,
-    name: "Organic Lettuce",
-    farmer: "Green Valley",
-    location: "Ibadan, Oyo",
-    price: "₦3,200/bundle",
-    quantity: "200 bundles",
-    rating: 4.6,
-    reviews: 89,
-    image: "",
-    inStock: true,
-  },
-  {
-    id: 3,
-    name: "Premium Carrots",
-    farmer: "Root & Branch Co",
-    location: "Kano",
-    price: "₦5,000/kg",
-    quantity: "300kg",
-    rating: 4.9,
-    reviews: 156,
-    image: "",
-    inStock: false,
-  },
-  {
-    id: 4,
-    name: "Sweet Corn",
-    farmer: "Harvest King Farms",
-    location: "Abuja FCT",
-    price: "₦1,500/cob",
-    quantity: "1000 cobs",
-    rating: 4.5,
-    reviews: 78,
-    image: "",
-    inStock: true,
-  },
-  {
-    id: 5,
-    name: "Red Bell Peppers",
-    farmer: "Spice Garden",
-    location: "Lagos State",
-    price: "₦6,000/kg",
-    quantity: "150kg",
-    rating: 4.7,
-    reviews: 102,
-    image: "",
-    inStock: true,
-  },
-  {
-    id: 6,
-    name: "White Onions",
-    farmer: "Allium Traders",
-    location: "Port Harcourt",
-    price: "₦4,200/kg",
-    quantity: "400kg",
-    rating: 4.4,
-    reviews: 64,
-    image: "",
-    inStock: true,
-  },
-  {
-    id: 7,
-    name: "Golden Maize",
-    farmer: "Grain Masters",
-    location: "Kano",
-    price: "₦12,000/bag",
-    quantity: "100 bags",
-    rating: 4.8,
-    reviews: 145,
-    image: "",
-    inStock: true,
-  },
-  {
-    id: 8,
-    name: "Spinach Bundle",
-    farmer: "Leaf Produce",
-    location: "Ibadan, Oyo",
-    price: "₦2,500/bundle",
-    quantity: "350 bundles",
-    rating: 4.6,
-    reviews: 91,
-    image: "",
-    inStock: true,
-  },
-]
+import { Search, ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react" // Added ShoppingCart icon
+import { useListings } from "@/hooks/use-listings"
+import { useCart } from "@/hooks/use-cart"
+import { ContactFarmerModal } from "@/components/marketplace/contact-farmer-modal"
+import { CartSidebar } from "@/components/marketplace/cart-sidebar" // Imported CartSidebar
 
 export default function MarketplacePage() {
+  const { listings } = useListings()
+  const { addToCart, cartItems } = useCart() // Get cartItems to display count
+
   const [searchTerm, setSearchTerm] = useState("")
   const [filters, setFilters] = useState<FilterState>({
     priceRange: [0, 100000],
@@ -119,7 +27,48 @@ export default function MarketplacePage() {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
 
-  const filteredCrops = mockCrops.filter((crop) => {
+  const [showContactModal, setShowContactModal] = useState(false)
+  const [contactFarmerName, setContactFarmerName] = useState("")
+  const [contactCropName, setContactCropName] = useState("")
+  const [isCartOpen, setIsCartOpen] = useState(false) // State for cart sidebar
+
+  // Placeholder for current user ID - replace with actual user ID from auth context
+  const currentUserId = "user-123"
+
+  const handleContactClick = (farmer: string, crop: string) => {
+    setContactFarmerName(farmer)
+    setContactCropName(crop)
+    setShowContactModal(true)
+  }
+
+const marketplaceCrops = listings.map((listing) => {
+  const ownerId = listing?.ownerId || ""; // fallback if undefined
+  const isOwner = ownerId === currentUserId;
+
+  return {
+    id: listing.id,
+    name: listing.name,
+    farmer: isOwner
+      ? "You"
+      : ownerId
+      ? `Farmer ${ownerId.slice(-4)}`
+      : "Unknown Farmer", // fallback name
+    location: "Local",
+    price: listing.price,
+    quantity: listing.quantity,
+    rating: 4.5,
+    reviews: 100,
+    image: listing.image || "",
+    inStock: listing.status === "active",
+    ownerId,
+    isOwner,
+    createdAt: listing.createdAt,
+  };
+});
+
+
+  // Apply filters
+  const filteredCrops = marketplaceCrops.filter((crop) => {
     const matchesSearch =
       crop.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       crop.farmer.toLowerCase().includes(searchTerm.toLowerCase())
@@ -132,7 +81,10 @@ export default function MarketplacePage() {
   })
 
   const totalPages = Math.ceil(filteredCrops.length / itemsPerPage)
-  const paginatedCrops = filteredCrops.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+  const paginatedCrops = filteredCrops.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
 
   return (
     <DashboardLayout>
@@ -153,9 +105,9 @@ export default function MarketplacePage() {
 
           {/* Products */}
           <div className="lg:col-span-3">
-            {/* Search Bar */}
-            <div className="mb-6">
-              <div className="relative">
+            {/* Search Bar and Cart Button */}
+            <div className="mb-6 flex items-center gap-4">
+              <div className="relative flex-grow">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                 <input
                   type="text"
@@ -168,22 +120,46 @@ export default function MarketplacePage() {
                   className="w-full pl-10 pr-4 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
+              <Button
+                variant="outline"
+                // size="icon"
+                className="relative"
+                onClick={() => setIsCartOpen(true)}
+              >
+                <ShoppingCart size={20} />
+                {cartItems.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                    {cartItems.length}
+                  </span>
+                )}
+              </Button>
             </div>
 
-            {/* Results info */}
+            {/* Results Info */}
             <div className="mb-6 flex items-center justify-between">
               <p className="text-sm text-muted-foreground">
-                Showing {paginatedCrops.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0}-
-                {Math.min(currentPage * itemsPerPage, filteredCrops.length)} of {filteredCrops.length} products
+                Showing{" "}
+                {paginatedCrops.length > 0
+                  ? (currentPage - 1) * itemsPerPage + 1
+                  : 0}
+                -
+                {Math.min(currentPage * itemsPerPage, filteredCrops.length)} of{" "}
+                {filteredCrops.length} products
               </p>
             </div>
 
-            {/* Products Grid */}
+            {/* Product Grid */}
             {paginatedCrops.length > 0 ? (
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
                   {paginatedCrops.map((crop) => (
-                    <CropCard key={crop.id} {...crop} />
+                    <CropCard
+                      key={crop.id}
+                      {...crop}
+                      addToCart={addToCart}
+                      handleContactClick={handleContactClick}
+                      isOwner={crop.isOwner} // Pass isOwner prop
+                    />
                   ))}
                 </div>
 
@@ -193,7 +169,9 @@ export default function MarketplacePage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.max(1, prev - 1))
+                      }
                       disabled={currentPage === 1}
                     >
                       <ChevronLeft size={16} />
@@ -213,7 +191,11 @@ export default function MarketplacePage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                      onClick={() =>
+                        setCurrentPage((prev) =>
+                          Math.min(totalPages, prev + 1)
+                        )
+                      }
                       disabled={currentPage === totalPages}
                     >
                       <ChevronRight size={16} />
@@ -244,6 +226,17 @@ export default function MarketplacePage() {
           </div>
         </div>
       </div>
+
+      {/* Contact Farmer Modal */}
+      <ContactFarmerModal
+        isOpen={showContactModal}
+        onClose={() => setShowContactModal(false)}
+        farmerName={contactFarmerName}
+        cropName={contactCropName}
+      />
+
+      {/* Cart Sidebar */}
+      <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </DashboardLayout>
   )
 }

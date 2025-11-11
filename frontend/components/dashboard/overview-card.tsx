@@ -1,11 +1,11 @@
-"use client"
 import { Card, CardContent } from "@/components/ui/card"
 import { motion } from "framer-motion"
+import React from "react" // Import React
 
 interface OverviewCardProps {
   label: string
   value: string | number
-  icon: string
+  icon: React.ReactNode // Changed to React.ReactNode
 }
 
 export function OverviewCard({ label, value, icon }: OverviewCardProps) {

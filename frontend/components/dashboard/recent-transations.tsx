@@ -3,32 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { motion } from "framer-motion"
 import { CheckCircle, AlertCircle, Clock } from "lucide-react"
 
-const transactions = [
-  {
-    id: 1,
-    crop: "Tomatoes - 50kg",
-    buyer: "John Restaurants Ltd",
-    amount: "₦25,000",
-    status: "completed",
-    date: "Today, 2:30 PM",
-  },
-  {
-    id: 2,
-    crop: "Maize - 100kg",
-    buyer: "Metro Agro Traders",
-    amount: "₦45,000",
-    status: "pending",
-    date: "Yesterday, 10:15 AM",
-  },
-  {
-    id: 3,
-    crop: "Lettuce - 20kg",
-    buyer: "Fresh Market Co",
-    amount: "₦8,000",
-    status: "completed",
-    date: "2 days ago",
-  },
-]
+interface Transaction {
+  id: number
+  crop: string
+  buyer: string
+  amount: string
+  status: "completed" | "pending" | "failed"
+  date: string
+}
+
+const transactions: Transaction[] = []
 
 export function RecentTransactions() {
   const getStatusIcon = (status: string) => {
@@ -72,8 +56,10 @@ export function RecentTransactions() {
               </motion.div>
             ))
           ) : (
-            <div className="text-center py-8">
-              <p className="text-muted-foreground">No transactions yet</p>
+            <div className="text-center py-8 flex flex-col items-center justify-center">
+              <Clock className="w-12 h-12 text-muted-foreground mb-4" />
+              <p className="text-muted-foreground text-lg font-medium">No recent transactions</p>
+              <p className="text-muted-foreground text-sm mt-1">Your activity will appear here.</p>
             </div>
           )}
         </div>

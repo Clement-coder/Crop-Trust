@@ -39,7 +39,7 @@ export function BalanceCard() {
               <p className="text-sm opacity-80 mb-2">Total Balance</p>
               <div className="flex items-end gap-4">
                 <div className="flex items-baseline gap-2">
-                  <h2 className="text-5xl font-bold">{isVisible ? '₦0.00' : '••••••'}</h2>
+                  <h2 className="text-5xl font-bold">{isVisible ? '$0.00' : '••••••'}</h2>
                 </div>
                 <button
                   onClick={() => setIsVisible(!isVisible)}

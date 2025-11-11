@@ -55,7 +55,7 @@ export function TestimonialSection() {
         >
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">Voices of Trust</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Hear from farmers, buyers, and traders who've transformed their business with CropTrust.
+            Hear from farmers, buyers, and traders who&#39;ve transformed their business with CropTrust.
           </p>
         </motion.div>
 
@@ -70,7 +70,7 @@ export function TestimonialSection() {
             <motion.div key={index} variants={itemVariants}>
               <Card>
                 <CardContent className="pt-6">
-                  <p className="text-lg text-foreground mb-4 italic">"{testimonial.quote}"</p>
+                  <p className="text-lg text-foreground mb-4 italic">{testimonial.quote}</p>
                   <div className="flex items-center gap-3">
                     <div className="text-3xl">{testimonial.avatar}</div>
                     <div>

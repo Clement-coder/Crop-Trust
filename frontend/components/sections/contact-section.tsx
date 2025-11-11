@@ -11,7 +11,7 @@ export function ContactSection() {
             Contact Us
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            We'd love to hear from you! Send us a message and we'll get back to you as soon as possible.
+            We&#39;d love to hear from you! Send us a message and we&#39;ll get back to you as soon as possible.
           </p>
         </div>
         <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
