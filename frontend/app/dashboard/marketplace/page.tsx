@@ -14,7 +14,7 @@ import { CartSidebar } from "@/components/marketplace/cart-sidebar" // Imported 
 
 export default function MarketplacePage() {
   const { listings } = useListings()
-  const { addToCart, cartItems } = useCart() // Get cartItems to display count
+  const { addToCart, cartItems, getCartCount } = useCart() // Get cartItems to display count
 
   const [searchTerm, setSearchTerm] = useState("")
   const [filters, setFilters] = useState<FilterState>({
@@ -128,7 +128,7 @@ const marketplaceCrops = listings.map((listing) => {
               >
                 <ShoppingCart size={20} />
                 <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground rounded-full h-5 w-5 flex items-center justify-center text-xs">
-                  {cartItems.length}
+                  {getCartCount()}
                 </span>
               </Button>
             </div>

@@ -17,7 +17,7 @@ interface CropCardProps {
   reviews: number
   image: string
   inStock: boolean
-  addToCart: (item: Listing, quantityInCart: number) => void
+  addToCart: (item: Listing, quantity: number) => void
   handleContactClick: (farmer: string, crop: string) => void
   isOwner: boolean
   createdAt: string // Added createdAt prop
@@ -26,18 +26,9 @@ interface CropCardProps {
 export function CropCard({ id, name, farmer, location, price, quantity, rating, reviews, image, inStock, addToCart, handleContactClick, isOwner, createdAt }: CropCardProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _id = id
-  const [isAddingToCart, setIsAddingToCart] = useState(false)
-  const [addedToCart, setAddedToCart] = useState(false)
 
   const handleAddToCart = () => {
-    setIsAddingToCart(true)
-    // Simulate API call or async operation
-    setTimeout(() => {
-      addToCart({ id, name, price, quantity, status: inStock ? "active" : "sold out", views: 0, inquiries: 0, image, ownerId: "", createdAt: createdAt }, 1) // Pass 1 as default quantity, ownerId is placeholder
-      setIsAddingToCart(false)
-      setAddedToCart(true)
-      setTimeout(() => setAddedToCart(false), 2000)
-    }, 500)
+    addToCart({ id, name, price, quantity, status: inStock ? "active" : "sold out", views: 0, inquiries: 0, image, ownerId: "", createdAt: createdAt }, 1) // Pass 1 as default quantity, ownerId is placeholder
   }
 
   const formattedDate = new Date(createdAt).toLocaleDateString("en-US", {
@@ -116,20 +107,10 @@ export function CropCard({ id, name, farmer, location, price, quantity, rating, 
             <Button
               className="flex-1"
               size="sm"
-              disabled={!inStock || isAddingToCart || addedToCart || isOwner} // Disable if isOwner
+              disabled={!inStock || isOwner} // Disable if isOwner
               onClick={handleAddToCart}
             >
-              {isAddingToCart ? (
-                "Adding..."
-              ) : addedToCart ? (
-                <>
-                  <Check size={16} /> Added!
-                </>
-              ) : (
-                <>
-                  <ShoppingCart size={16} /> Add to Cart
-                </>
-              )}
+              <ShoppingCart size={16} /> Add to Cart
             </Button>
             <Button variant="outline" size="sm" className="flex-1 bg-transparent" onClick={() => handleContactClick(farmer, name)}>
               <MessageCircle size={16} />

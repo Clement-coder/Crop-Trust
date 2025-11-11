@@ -17,7 +17,7 @@ const sidebarVariants = {
 }
 
 export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
-  const { cartItems, removeFromCart, updateItemQuantity, calculateTotal } = useCart()
+  const { cartItems, removeFromCart, updateItemQuantity, calculateTotal, getCartCount } = useCart()
 
   const handleQuantityChange = (itemId: string, newQuantity: number) => {
     updateItemQuantity(itemId, newQuantity)
@@ -43,7 +43,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
             <div className="p-4 border-b flex items-center justify-between">
-              <h2 className="text-xl font-semibold">Your Cart</h2>
+              <h2 className="text-xl font-semibold">Your Cart ({getCartCount()})</h2>
               <Button variant="ghost" size="icon" onClick={onClose}>
                 <X size={20} />
               </Button>

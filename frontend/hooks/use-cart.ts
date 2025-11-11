@@ -65,5 +65,9 @@ export function useCart() {
     return cartItems.reduce((total, item) => total + parseFloat(item.price) * item.quantity, 0)
   }
 
-  return { cartItems, addToCart, removeFromCart, clearCart, updateItemQuantity, calculateTotal }
+  const getCartCount = () => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0)
+  }
+
+  return { cartItems, addToCart, removeFromCart, clearCart, updateItemQuantity, calculateTotal, getCartCount }
 }
