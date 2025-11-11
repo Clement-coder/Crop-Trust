@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { ShoppingCart, MessageCircle, Star, MapPin, Scale, User, Calendar, Clock, Check } from "lucide-react" // Added Calendar icon
 import { useState } from "react"
-import { Product } from "@/hooks/use-products.tsx"
+import { Product } from "@/hooks/use-products"
 import Image from "next/image"
 
 interface CropCardProps extends Omit<Product, "price" | "quantity"> {

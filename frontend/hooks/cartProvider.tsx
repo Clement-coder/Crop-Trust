@@ -7,7 +7,7 @@ import {
   useEffect,
   type ReactNode,
 } from "react"
-import { useProducts, type Product } from "./use-products.tsx"
+import { useProducts, type Product } from "./use-products"
 
 export interface CartItem extends Omit<Product, "quantity"> {
   quantity: number // cart-specific quantity

@@ -42,7 +42,7 @@ export function Sidebar() {
       await logout()
       toast({
         title: "Logged out successfully",
-        description: "You have been successfully logged out.",
+        // description: "You have been successfully logged out.",
         variant: "success",
       })
       window.location.href = "/"
@@ -50,7 +50,7 @@ export function Sidebar() {
     } catch (_error) {
       toast({
         title: "Logout failed",
-        description: "An error occurred while logging out.",
+        // description: "An error occurred while logging out.",
         variant: "destructive",
       })
     } finally {

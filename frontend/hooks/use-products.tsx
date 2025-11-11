@@ -17,6 +17,8 @@ export interface Product extends Omit<Listing, "price" | "quantity"> {
   rating: number
   reviews: number
   isOwner: boolean
+    inStock?: boolean   // ✅ Add this
+
 }
 
 interface ProductContextType {
@@ -164,28 +166,26 @@ export function ProductProvider({ children }: { children: ReactNode }) {
       },
     ]
 
-    const combinedProducts = [
-      ...dummyCrops,
-      ...listings.map((listing) => {
-        const ownerId = listing?.ownerId || "" // fallback if undefined
-        const isOwner = ownerId === currentUserId
+const combinedProducts = [
+  ...dummyCrops.map(crop => ({ ...crop, status: "active" as const })), // type safe
+  ...listings.map((listing) => {
+    const ownerId = listing?.ownerId || ""
+    const isOwner = ownerId === currentUserId
 
-        return {
-          ...listing,
-          price: parseFloat(listing.price),
-          quantity: parseInt(listing.quantity),
-          farmer: isOwner
-            ? "You"
-            : ownerId
-            ? `Farmer ${ownerId.slice(-4)}`
-            : "Unknown Farmer", // fallback name
-          location: "Local",
-          rating: 4.5,
-          reviews: 100,
-          isOwner,
-        }
-      }),
-    ]
+    return {
+      ...listing,
+      price: parseFloat(listing.price),
+      quantity: parseInt(listing.quantity),
+      farmer: isOwner ? "You" : ownerId ? `Farmer ${ownerId.slice(-4)}` : "Unknown Farmer",
+      location: "Local",
+      rating: 4.5,
+      reviews: 100,
+      isOwner,
+      status: "active" as const,   // ✅ cast to union type
+    }
+  }),
+]
+
     setProducts(combinedProducts)
   }, [listings])
 

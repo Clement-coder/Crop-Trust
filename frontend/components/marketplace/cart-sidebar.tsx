@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { useCart } from "@/hooks/use-cart.tsx"
+import { useCart } from "@/hooks/use-cart"
 import Image from "next/image"
 import { X, Trash2, Minus, Plus, ShoppingCart } from "lucide-react"
 import { CheckoutModals } from "./checkout-modals"

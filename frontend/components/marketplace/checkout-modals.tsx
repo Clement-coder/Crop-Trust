@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { useCart } from "@/hooks/use-cart.tsx"
+import { useCart } from "@/hooks/use-cart"
 import { useListings } from "@/hooks/use-listings"
 import { CheckCircle, Loader, ShieldCheck, X } from "lucide-react"
 

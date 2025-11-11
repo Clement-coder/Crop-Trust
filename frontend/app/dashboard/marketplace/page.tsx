@@ -122,16 +122,25 @@ export default function MarketplacePage() {
               <>
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
                   {paginatedCrops.map((crop) => (
-                    <CropCard
-                      key={crop.id}
-                      {...crop}
-                      price={crop.price.toString()}
-                      quantity={crop.quantity.toString()}
-                      inStock={crop.status === "active"}
-                      addToCart={addToCart}
-                      handleContactClick={handleContactClick}
-                      isOwner={crop.isOwner} // Pass isOwner prop
-                    />
+                <CropCard
+  key={crop.id}
+  {...crop}
+  price={crop.price.toString()}
+  quantity={crop.quantity.toString()}
+  inStock={crop.status === "active"}
+  addToCart={(item, quantity) => 
+    addToCart(
+      {
+        ...item,
+        quantity: String(item.quantity), // ensure quantity is string
+      } as any, // or as Listing if you imported the type
+      quantity
+    )
+  }
+  handleContactClick={handleContactClick}
+  isOwner={crop.isOwner}
+/>
+
                   ))}
                 </div>
 
