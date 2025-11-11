@@ -7,14 +7,14 @@ import { Filters, type FilterState } from "@/components/marketplace/filters"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { Search, ChevronLeft, ChevronRight, ShoppingCart } from "lucide-react" // Added ShoppingCart icon
-import { useListings } from "@/hooks/use-listings"
+import { useProducts } from "@/hooks/use-products"
 import { useCart } from "@/hooks/use-cart"
 import { ContactFarmerModal } from "@/components/marketplace/contact-farmer-modal"
 import { CartSidebar } from "@/components/marketplace/cart-sidebar" // Imported CartSidebar
 
 export default function MarketplacePage() {
-  const { listings } = useListings()
-  const { addToCart, cartItems, getCartCount } = useCart() // Get cartItems to display count
+  const { products } = useProducts()
+  const { addToCart, getCartCount } = useCart() // Get cartItems to display count
 
   const [searchTerm, setSearchTerm] = useState("")
   const [filters, setFilters] = useState<FilterState>({
@@ -32,50 +32,21 @@ export default function MarketplacePage() {
   const [contactCropName, setContactCropName] = useState("")
   const [isCartOpen, setIsCartOpen] = useState(false) // State for cart sidebar
 
-  // Placeholder for current user ID - replace with actual user ID from auth context
-  const currentUserId = "user-123"
-
   const handleContactClick = (farmer: string, crop: string) => {
     setContactFarmerName(farmer)
     setContactCropName(crop)
     setShowContactModal(true)
   }
 
-const marketplaceCrops = listings.map((listing) => {
-  const ownerId = listing?.ownerId || ""; // fallback if undefined
-  const isOwner = ownerId === currentUserId;
-
-  return {
-    id: listing.id,
-    name: listing.name,
-    farmer: isOwner
-      ? "You"
-      : ownerId
-      ? `Farmer ${ownerId.slice(-4)}`
-      : "Unknown Farmer", // fallback name
-    location: "Local",
-    price: listing.price,
-    quantity: listing.quantity,
-    rating: 4.5,
-    reviews: 100,
-    image: listing.image || "",
-    inStock: listing.status === "active",
-    ownerId,
-    isOwner,
-    createdAt: listing.createdAt,
-  };
-});
-
-
   // Apply filters
-  const filteredCrops = marketplaceCrops.filter((crop) => {
+  const filteredCrops = products.filter((crop) => {
     const matchesSearch =
       crop.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       crop.farmer.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCrop = !filters.cropType || crop.name.includes(filters.cropType)
     const matchesLocation = !filters.location || crop.location.includes(filters.location)
     const matchesRating = crop.rating >= filters.rating
-    const matchesStock = !filters.inStockOnly || crop.inStock
+    const matchesStock = !filters.inStockOnly || crop.status === "active"
 
     return matchesSearch && matchesCrop && matchesLocation && matchesRating && matchesStock
   })
@@ -154,6 +125,9 @@ const marketplaceCrops = listings.map((listing) => {
                     <CropCard
                       key={crop.id}
                       {...crop}
+                      price={crop.price.toString()}
+                      quantity={crop.quantity.toString()}
+                      inStock={crop.status === "active"}
                       addToCart={addToCart}
                       handleContactClick={handleContactClick}
                       isOwner={crop.isOwner} // Pass isOwner prop

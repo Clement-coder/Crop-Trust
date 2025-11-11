@@ -2,6 +2,9 @@
 import React from 'react';
 import { PrivyProvider } from '@privy-io/react-auth';
 
+import { ProductProvider } from "@/hooks/use-products.tsx"
+import { CartProvider } from "@/hooks/use-cart.tsx"
+
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <PrivyProvider
@@ -17,7 +20,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         loginMethods: ['google'],
       }}
     >
-      {children}
+      <ProductProvider>
+        <CartProvider>{children}</CartProvider>
+      </ProductProvider>
     </PrivyProvider>
   );
 }

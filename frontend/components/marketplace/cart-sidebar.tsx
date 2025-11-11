@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { useCart } from "@/hooks/use-cart"
+import { useCart } from "@/hooks/use-cart.tsx"
 import Image from "next/image"
 import { X, Trash2, Minus, Plus, ShoppingCart } from "lucide-react"
 

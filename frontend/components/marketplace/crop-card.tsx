@@ -3,32 +3,29 @@ import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { ShoppingCart, MessageCircle, Star, MapPin, Scale, User, Calendar, Clock, Check } from "lucide-react" // Added Calendar icon
 import { useState } from "react"
-import { Listing } from "@/hooks/use-listings"
+import { Product } from "@/hooks/use-products.tsx"
 import Image from "next/image"
 
-interface CropCardProps {
-  id: string
-  name: string
-  farmer: string
-  location: string
+interface CropCardProps extends Omit<Product, "price" | "quantity"> {
   price: string
   quantity: string
-  rating: number
-  reviews: number
-  image: string
   inStock: boolean
-  addToCart: (item: Listing, quantity: number) => void
+  addToCart: (item: Product, quantity: number) => void
   handleContactClick: (farmer: string, crop: string) => void
-  isOwner: boolean
-  createdAt: string // Added createdAt prop
 }
 
-export function CropCard({ id, name, farmer, location, price, quantity, rating, reviews, image, inStock, addToCart, handleContactClick, isOwner, createdAt }: CropCardProps) {
+export function CropCard({ id, name, farmer, location, price, quantity, rating, reviews, image, inStock, addToCart, handleContactClick, isOwner, createdAt, status, ownerId, views, inquiries }: CropCardProps) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const _id = id
 
+  const [isAdded, setIsAdded] = useState(false)
+
   const handleAddToCart = () => {
-    addToCart({ id, name, price, quantity, status: inStock ? "active" : "sold out", views: 0, inquiries: 0, image, ownerId: "", createdAt: createdAt }, 1) // Pass 1 as default quantity, ownerId is placeholder
+    addToCart({ id, name, price: parseFloat(price), quantity: parseInt(quantity), rating, reviews, image, inStock, farmer, location, isOwner, createdAt, status, ownerId, views, inquiries }, 1) // Pass 1 as default quantity
+    setIsAdded(true)
+    setTimeout(() => {
+      setIsAdded(false)
+    }, 2000)
   }
 
   const formattedDate = new Date(createdAt).toLocaleDateString("en-US", {
@@ -107,10 +104,18 @@ export function CropCard({ id, name, farmer, location, price, quantity, rating, 
             <Button
               className="flex-1"
               size="sm"
-              disabled={!inStock || isOwner} // Disable if isOwner
+              disabled={!inStock || isOwner || isAdded} // Disable if isOwner or isAdded
               onClick={handleAddToCart}
             >
-              <ShoppingCart size={16} /> Add to Cart
+              {isAdded ? (
+                <>
+                  <Check size={16} /> Added
+                </>
+              ) : (
+                <>
+                  <ShoppingCart size={16} /> Add to Cart
+                </>
+              )}
             </Button>
             <Button variant="outline" size="sm" className="flex-1 bg-transparent" onClick={() => handleContactClick(farmer, name)}>
               <MessageCircle size={16} />
